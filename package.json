@@ -1,6 +1,6 @@
 {
   "name": "khan-graphql",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Package to scrape Khan Academy for student data",
   "main": "index.js",
   "author": "Joseph Gilgen <gilgenlabs@gmail.com>",
