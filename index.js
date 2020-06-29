@@ -89,4 +89,15 @@ exports.KhanApi = class {
 
     return this.graphQL("/getStudentsList", payload)
   }
+
+  ClassSubjectMasteryProgress = async ({ classId, topicId }) => {
+    let payload = {
+      operationName: "ClassSubjectMasteryProgress",
+      variables: { classId, topicId },
+      query:
+        "query ClassSubjectMasteryProgress($classId: String!, $topicId: String!) {\n  topicById(id: $topicId) {\n    id\n    childTopics {\n      id\n      translatedTitle\n      __typename\n    }\n    __typename\n  }\n  coach {\n    id\n    studentList(id: $classId) {\n      id\n      cacheId\n      students {\n        id\n        coachNickname\n        subjectProgress(topicId: $topicId) {\n          currentMastery {\n            percentage\n            pointsEarned\n            pointsAvailable\n            __typename\n          }\n          unitProgresses {\n            topic {\n              id\n              __typename\n            }\n            currentMastery {\n              percentage\n              pointsEarned\n              pointsAvailable\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n",
+    }
+
+    return this.graphQL("/ClassSubjectMasteryProgress", payload)
+  }
 }
