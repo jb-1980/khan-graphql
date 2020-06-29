@@ -100,4 +100,15 @@ exports.KhanApi = class {
 
     return this.graphQL("/ClassSubjectMasteryProgress", payload)
   }
+
+  getFullUserProfile = async () => {
+    let payload = {
+      operationName: "getFullUserProfile",
+      variables: {},
+      query:
+        'query getFullUserProfile($kaid: String, $username: String) {\n  user(kaid: $kaid, username: $username) {\n    id\n    kaid\n    key\n    userId\n    email\n    username\n    userLanguage\n    profileRoot\n    childPageRoot\n    gaUserId\n    qualarooId\n    isPhantom\n    isDeveloper: hasRole(name: "admin")\n    isCurator: hasRole(name: "curator", scope: ANY_ON_CURRENT_LOCALE)\n    isCreator: hasRole(name: "creator", scope: ANY_ON_CURRENT_LOCALE)\n    isPublisher: hasPermission(name: "can_publish", scope: ANY_ON_CURRENT_LOCALE)\n    isModerator: hasPermission(name: "can_moderate_users", scope: GLOBAL)\n    isPublic\n    isParent\n    isTeacher\n    isDataCollectible\n    isChild\n    isOrphan\n    isActivityAccessible\n    isCoachingLoggedInUser\n    isParentOfLoggedInUser\n    canModifyCoaches\n    nickname\n    hideVisual\n    joined\n    points\n    countVideosCompleted\n    publicBadges {\n      badgeCategory\n      description\n      isOwned\n      isRetired\n      name\n      points\n      absoluteUrl\n      hideContext\n      icons {\n        smallUrl\n        compactUrl\n        emailUrl\n        largeUrl\n        __typename\n      }\n      relativeUrl\n      safeExtendedDescription\n      slug\n      translatedDescription\n      translatedSafeExtendedDescription\n      __typename\n    }\n    bio\n    background {\n      name\n      imageSrc\n      __typename\n    }\n    schoolAffiliation {\n      id\n      name\n      postalCode\n      location\n      __typename\n    }\n    affiliationCountryCode\n    soundOn\n    muteVideos\n    prefersReducedMotion\n    noColorInVideos\n    autocontinueOn\n    avatar {\n      name\n      imageSrc\n      __typename\n    }\n    hasChangedAvatar\n    newNotificationCount\n    canHellban: hasPermission(name: "can_ban_users", scope: GLOBAL)\n    canMessageUsers: hasPermission(name: "can_send_moderator_messages", scope: GLOBAL)\n    canCreateOfficialClarifications: hasPermission(name: "can_approve_clarifications", scope: GLOBAL)\n    canEvalCsProjects\n    discussionBanned\n    isSelf: isActor\n    hasStudents\n    hasClasses\n    hasChildren\n    hasCoach\n    badgeCounts\n    homepageUrl\n    hasCoachHomepage\n    hasParentHomepage\n    isMidsignupPhantom\n    streakLastExtended\n    streakLastLength\n    includesDistrictOwnedData\n    preferredKaLocale {\n      id\n      kaLocale\n      status\n      __typename\n    }\n    __typename\n  }\n}\n',
+    }
+
+    return this.graphQL("/getFullUserProfile", payload)
+  }
 }
