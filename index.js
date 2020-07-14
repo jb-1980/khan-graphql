@@ -22,8 +22,8 @@ exports.KhanApi = class {
       )}&password=${encodeURIComponent(password)}`,
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     }).then((res) => {
-      if (res.data.error) {
-        throw new Error(res.data.error)
+      if (res.data.errors) {
+        throw new Error(res.data.errors)
       }
       this.authenticated = true
       return true
