@@ -1,10 +1,18 @@
 {
   "name": "khan-graphql",
   "version": "1.2.1",
-  "description": "Package to scrape Khan Academy for student data",
+  "description": "Package to use Khan Academy graphql endpoints to fetch student data",
   "main": "index.js",
   "author": "Joseph Gilgen <gilgenlabs@gmail.com>",
   "license": "MIT",
+  "keywords": [
+    "graphql",
+    "Khan",
+    "Khan Academy",
+    "api"
+  ],
+  "homepage": "https://github.com/jb-1980/khan-graphql/blob/master/README.md",
+  "repository": "github:jb-1980/khan-graphql",
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
