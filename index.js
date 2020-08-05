@@ -12,7 +12,9 @@ const BASE_URL = "https://www.khanacademy.org"
 const loginUrl = `${BASE_URL}/login`
 
 exports.KhanApi = class {
-  authenticated = false
+  constructor() {
+    this.authenticated = false
+  }
   authenticate = async (identifier, password) =>
     axios({
       url: loginUrl,
