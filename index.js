@@ -69,13 +69,12 @@ exports.KhanApi = class {
       operationName: "ProgressByStudent",
       variables: {
         classId,
-        pageSize,
         assignmentFilters: { dueAfter: null, dueBefore: null },
-        contentKinds: null,
         after: null,
+        pageSize,
       },
       query:
-        "query ProgressByStudent($assignmentFilters: CoachAssignmentFilters, $contentKinds: [LearnableContentKind], $classId: String!, $pageSize: Int, $after: ID) {\n  coach {\n    id\n    studentList(id: $classId) {\n      id\n      cacheId\n      studentKaidsAndNicknames {\n        id\n        coachNickname\n        __typename\n      }\n      assignmentsPage(filters: $assignmentFilters, after: $after, pageSize: $pageSize) {\n        assignments(contentKinds: $contentKinds) {\n          id\n          dueDate\n          contents {\n            id\n            translatedTitle\n            kind\n            defaultUrlPath\n            __typename\n          }\n          itemCompletionStates: itemCompletionStatesForAllStudents {\n            completedOn\n            studentKaid\n            bestScore {\n              numAttempted\n              numCorrect\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        pageInfo {\n          nextCursor\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n",
+        "query ProgressByStudent($assignmentFilters: CoachAssignmentFilters, $classId: String!, $pageSize: Int, $after: ID) {\n  coach {\n    id\n    studentList(id: $classId) {\n      id\n      cacheId\n      studentKaidsAndNicknames {\n        id\n        coachNickname\n        __typename\n      }\n      assignmentsPage(filters: $assignmentFilters, after: $after, pageSize: $pageSize) {\n        assignments {\n          id\n          dueDate\n          contents {\n            id\n            translatedTitle\n            kind\n            defaultUrlPath\n            __typename\n          }\n          itemCompletionStates: itemCompletionStatesForAllStudents {\n            completedOn\n            studentKaid\n            bestScore {\n              numAttempted\n              numCorrect\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        pageInfo {\n          nextCursor\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n",
     }
 
     return this.graphQL("/ProgressByStudent", payload)
