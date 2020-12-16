@@ -9,27 +9,26 @@ axios.defaults.jar = cookieJar
 axios.defaults.withCredentials = true
 
 const BASE_URL = "https://www.khanacademy.org"
-const loginUrl = `${BASE_URL}/login`
 
 exports.KhanApi = class {
   constructor() {
     this.authenticated = false
   }
   authenticate = async (identifier, password) =>
-    axios({
-      url: loginUrl,
-      method: "post",
-      data: `identifier=${encodeURIComponent(
-        identifier
-      )}&password=${encodeURIComponent(password)}`,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    }).then((res) => {
-      if (res.data.errors) {
-        throw new Error(res.data.errors)
-      }
-      this.authenticated = true
-      return true
-    })
+    this.loginWithPasswordMutation({ identifier, password })
+      .then((res) => {
+        let data = res.data.data.loginWithPassword
+        console.log({ loginResponse: res.headers, data: res.data })
+        if (data.error) {
+          throw Error(data.error)
+        }
+        this.authenticated = true
+        return data.user
+      })
+      .catch((err) => {
+        this.authenticated = false
+        throw Error(err)
+      })
 
   // helper methods to wrap axios
   axios() {
@@ -53,6 +52,23 @@ exports.KhanApi = class {
    * page in Khan Academy. Add the payload values as an object, and then you can
    * fetch the data using this.graphQL
    */
+  loginWithPasswordMutation = ({ identifier, password }) => {
+    let payload = {
+      operationName: "loginWithPasswordMutation",
+      variables: { identifier, password },
+      query:
+        'mutation loginWithPasswordMutation($identifier: String!, $password: String!) {\n  loginWithPassword(identifier: $identifier, password: $password) {\n    user {\n      id\n      kaid\n      canAccessDistrictsHomepage\n      isTeacher\n      hasUnresolvedInvitations\n      transferAuthUrl(pathname: "")\n      preferredKaLocale {\n        id\n        kaLocale\n        __typename\n      }\n      __typename\n    }\n    isFirstLogin\n    error {\n      code\n      __typename\n    }\n    __typename\n  }\n}\n',
+    }
+
+    let url = `${BASE_URL}/api/internal/graphql/loginWithPasswordMutation`
+
+    return this.post(url, payload, {
+      headers: {
+        Cookie: "fkey=fkey",
+        "x-ka-fkey": "fkey",
+      },
+    })
+  }
 
   getCoach = async () => {
     let payload = {
