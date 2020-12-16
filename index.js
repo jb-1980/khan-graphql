@@ -18,7 +18,6 @@ exports.KhanApi = class {
     this.loginWithPasswordMutation({ identifier, password })
       .then((res) => {
         let data = res.data.data.loginWithPassword
-        console.log({ loginResponse: res.headers, data: res.data })
         if (data.error) {
           throw Error(data.error)
         }
