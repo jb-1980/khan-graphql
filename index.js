@@ -13,6 +13,7 @@ const BASE_URL = "https://www.khanacademy.org"
 exports.KhanApi = class {
   constructor() {
     this.authenticated = false
+    this.user = null
   }
   
   authenticate = async (identifier, password) =>
@@ -21,12 +22,13 @@ exports.KhanApi = class {
         let data = res.data.data.loginWithPassword
         if (data.error) {
           if(data.error.code == 'ALREADY_LOGGED_IN'){
-            await this.logout()
-            return await this.loginWithPasswordMutation({ identifier, password })
+            this.authenticated = true;
+            return this.user
           }
           throw Error(data.error)
         }
         this.authenticated = true
+        this.user = data.user
         return data.user
       })
       .catch((err) => {
