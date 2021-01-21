@@ -13,15 +13,22 @@ const BASE_URL = "https://www.khanacademy.org"
 exports.KhanApi = class {
   constructor() {
     this.authenticated = false
+    this.user = null
   }
+  
   authenticate = async (identifier, password) =>
     this.loginWithPasswordMutation({ identifier, password })
-      .then((res) => {
+      .then(async (res) => {
         let data = res.data.data.loginWithPassword
         if (data.error) {
+          if(data.error.code == 'ALREADY_LOGGED_IN'){
+            this.authenticated = true;
+            return this.user
+          }
           throw Error(data.error)
         }
         this.authenticated = true
+        this.user = data.user
         return data.user
       })
       .catch((err) => {
@@ -67,6 +74,11 @@ exports.KhanApi = class {
         "x-ka-fkey": "fkey",
       },
     })
+  }
+
+  logout(){
+    let url = `${BASE_URL}/logout`
+    return this.get(url)
   }
 
   getCoach = async () => {
