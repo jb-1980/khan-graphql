@@ -14,11 +14,16 @@ exports.KhanApi = class {
   constructor() {
     this.authenticated = false
   }
+  
   authenticate = async (identifier, password) =>
     this.loginWithPasswordMutation({ identifier, password })
-      .then((res) => {
+      .then(async (res) => {
         let data = res.data.data.loginWithPassword
         if (data.error) {
+          if(data.error.code == 'ALREADY_LOGGED_IN'){
+            await this.logout()
+            return await this.loginWithPasswordMutation({ identifier, password })
+          }
           throw Error(data.error)
         }
         this.authenticated = true
@@ -67,6 +72,11 @@ exports.KhanApi = class {
         "x-ka-fkey": "fkey",
       },
     })
+  }
+
+  logout(){
+    let url = `${BASE_URL}/logout`
+    return this.get(url)
   }
 
   getCoach = async () => {
