@@ -15,14 +15,15 @@ exports.KhanApi = class {
     this.authenticated = false
     this.user = null
   }
-  
+
   authenticate = async (identifier, password) =>
     this.loginWithPasswordMutation({ identifier, password })
       .then(async (res) => {
+        console.log({ res })
         let data = res.data.data.loginWithPassword
         if (data.error) {
-          if(data.error.code == 'ALREADY_LOGGED_IN'){
-            this.authenticated = true;
+          if (data.error.code == "ALREADY_LOGGED_IN") {
+            this.authenticated = true
             return this.user
           }
           throw Error(data.error)
@@ -76,7 +77,37 @@ exports.KhanApi = class {
     })
   }
 
-  logout(){
+  signupAdultWithPasswordMutation = async ({
+    password,
+    email,
+    firstname,
+    lastname,
+    role = "TEACHER",
+  }) => {
+    const payload = {
+      operationName: "signupAdultWithPasswordMutation",
+      variables: {
+        password,
+        email,
+        firstname,
+        lastname,
+        role,
+      },
+      query:
+        'mutation signupAdultWithPasswordMutation($email: String!, $password: String!, $firstname: String!, $lastname: String!, $role: UserRole!) {\n  signupAdultWithPassword(email: $email, password: $password, firstname: $firstname, lastname: $lastname, role: $role) {\n    user {\n      id\n      kaid\n      canAccessDistrictsHomepage\n      isTeacher\n      hasUnresolvedInvitations\n      transferAuthUrl(pathname: "")\n      preferredKaLocale {\n        id\n        kaLocale\n        __typename\n      }\n      __typename\n    }\n    error {\n      code\n      __typename\n    }\n    __typename\n  }\n}\n',
+    }
+
+    let url = `${BASE_URL}/api/internal/graphql/signupAdultWithPasswordMutation`
+
+    return this.post(url, payload, {
+      headers: {
+        Cookie: "fkey=fkey",
+        "x-ka-fkey": "fkey",
+      },
+    })
+  }
+
+  logout() {
     let url = `${BASE_URL}/logout`
     return this.get(url)
   }
