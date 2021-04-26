@@ -19,7 +19,6 @@ exports.KhanApi = class {
   authenticate = async (identifier, password) =>
     this.loginWithPasswordMutation({ identifier, password })
       .then(async (res) => {
-        console.log({ res })
         let data = res.data.data.loginWithPassword
         if (data.error) {
           if (data.error.code == "ALREADY_LOGGED_IN") {
@@ -148,12 +147,16 @@ exports.KhanApi = class {
     return this.graphQL("/getStudentsList", payload)
   }
 
-  ClassSubjectMasteryProgress = async ({ classId, topicId }) => {
+  ClassSubjectMasteryProgress = async ({ classId, topicId, teacherKaid }) => {
     let payload = {
       operationName: "ClassSubjectMasteryProgress",
-      variables: { classId, topicId },
+      variables: {
+        classId,
+        topicId,
+        teacherKaid,
+      },
       query:
-        "query ClassSubjectMasteryProgress($classId: String!, $topicId: String!) {\n  topicById(id: $topicId) {\n    id\n    childTopics {\n      id\n      translatedTitle\n      __typename\n    }\n    __typename\n  }\n  coach {\n    id\n    studentList(id: $classId) {\n      id\n      cacheId\n      students {\n        id\n        coachNickname\n        subjectProgress(topicId: $topicId) {\n          currentMastery {\n            percentage\n            pointsEarned\n            pointsAvailable\n            __typename\n          }\n          unitProgresses {\n            topic {\n              id\n              __typename\n            }\n            currentMastery {\n              percentage\n              pointsEarned\n              pointsAvailable\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n",
+        "query ClassSubjectMasteryProgress($classId: String!, $topicId: String!, $teacherKaid: String!) {\n  topicById(id: $topicId) {\n    id\n    childTopics {\n      id\n      translatedTitle\n      __typename\n    }\n    __typename\n  }\n  coach {\n    id\n    studentList(id: $classId) {\n      id\n      cacheId\n      students {\n        id\n        coachNickname(teacherKaid: $teacherKaid)\n        subjectProgress(topicId: $topicId) {\n          currentMastery {\n            percentage\n            pointsEarned\n            pointsAvailable\n            __typename\n          }\n          unitProgresses {\n            topic {\n              id\n              __typename\n            }\n            currentMastery {\n              percentage\n              pointsEarned\n              pointsAvailable\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n",
     }
 
     return this.graphQL("/ClassSubjectMasteryProgress", payload)
@@ -164,7 +167,7 @@ exports.KhanApi = class {
       operationName: "getFullUserProfile",
       variables: {},
       query:
-        'query getFullUserProfile($kaid: String, $username: String) {\n  user(kaid: $kaid, username: $username) {\n    id\n    kaid\n    key\n    userId\n    email\n    username\n    profileRoot\n    gaUserId\n    qualarooId\n    isPhantom\n    isDeveloper: hasPermission(name: "can_do_what_only_admins_can_do")\n    isCurator: hasPermission(name: "can_curate_tags", scope: ANY_ON_CURRENT_LOCALE)\n    isCreator: hasPermission(name: "has_creator_role", scope: ANY_ON_CURRENT_LOCALE)\n    isPublisher: hasPermission(name: "can_publish", scope: ANY_ON_CURRENT_LOCALE)\n    isModerator: hasPermission(name: "can_moderate_users", scope: GLOBAL)\n    isPublic\n    isParent\n    isSatStudent\n    isTeacher\n    isDataCollectible\n    isChild\n    isOrphan\n    isActivityAccessible\n    isCoachingLoggedInUser\n    isParentOfLoggedInUser\n    canModifyCoaches\n    nickname\n    hideVisual\n    joined\n    points\n    countVideosCompleted\n    publicBadges {\n      badgeCategory\n      description\n      isOwned\n      isRetired\n      name\n      points\n      absoluteUrl\n      hideContext\n      icons {\n        smallUrl\n        compactUrl\n        emailUrl\n        largeUrl\n        __typename\n      }\n      relativeUrl\n      safeExtendedDescription\n      slug\n      translatedDescription\n      translatedSafeExtendedDescription\n      __typename\n    }\n    bio\n    background {\n      name\n      imageSrc\n      __typename\n    }\n    soundOn\n    muteVideos\n    prefersReducedMotion\n    noColorInVideos\n    autocontinueOn\n    avatar {\n      name\n      imageSrc\n      __typename\n    }\n    hasChangedAvatar\n    newNotificationCount\n    canHellban: hasPermission(name: "can_ban_users", scope: GLOBAL)\n    canMessageUsers: hasPermission(name: "can_send_moderator_messages", scope: GLOBAL)\n    canEvalCsProjects\n    discussionBanned\n    isSelf: isActor\n    hasStudents\n    hasClasses\n    hasChildren\n    hasCoach\n    badgeCounts\n    homepageUrl\n    isMidsignupPhantom\n    streakLastExtended\n    streakLastLength\n    includesDistrictOwnedData\n    preferredKaLocale {\n      id\n      kaLocale\n      status\n      __typename\n    }\n    transferAuthUrl(pathname: "")\n    __typename\n  }\n}\n',
+        'query getFullUserProfile($kaid: String, $username: String) {\n  user(kaid: $kaid, username: $username) {\n    id\n    kaid\n    key\n    userId\n    email\n    username\n    profileRoot\n    gaUserId\n    qualarooId\n    isPhantom\n    isDeveloper: hasPermission(name: "can_do_what_only_admins_can_do")\n    isCurator: hasPermission(name: "can_curate_tags", scope: ANY_ON_CURRENT_LOCALE)\n    isCreator: hasPermission(name: "has_creator_role", scope: ANY_ON_CURRENT_LOCALE)\n    isPublisher: hasPermission(name: "can_publish", scope: ANY_ON_CURRENT_LOCALE)\n    isModerator: hasPermission(name: "can_moderate_users", scope: GLOBAL)\n    isParent\n    isSatStudent\n    isTeacher\n    isDataCollectible\n    isChild\n    isOrphan\n    isCoachingLoggedInUser\n    canModifyCoaches\n    nickname\n    hideVisual\n    joined\n    points\n    countVideosCompleted\n    publicBadges {\n      badgeCategory\n      description\n      isOwned\n      isRetired\n      name\n      points\n      absoluteUrl\n      hideContext\n      icons {\n        smallUrl\n        compactUrl\n        emailUrl\n        largeUrl\n        __typename\n      }\n      relativeUrl\n      safeExtendedDescription\n      slug\n      translatedDescription\n      translatedSafeExtendedDescription\n      __typename\n    }\n    bio\n    background {\n      name\n      imageSrc\n      __typename\n    }\n    soundOn\n    muteVideos\n    prefersReducedMotion\n    noColorInVideos\n    autocontinueOn\n    avatar {\n      name\n      imageSrc\n      __typename\n    }\n    hasChangedAvatar\n    newNotificationCount\n    canHellban: hasPermission(name: "can_ban_users", scope: GLOBAL)\n    canMessageUsers: hasPermission(name: "can_send_moderator_messages", scope: GLOBAL)\n    discussionBanned\n    isSelf: isActor\n    hasStudents: hasCoachees\n    hasClasses\n    hasChildren\n    hasCoach\n    badgeCounts\n    homepageUrl\n    isMidsignupPhantom\n    includesDistrictOwnedData\n    preferredKaLocale {\n      id\n      kaLocale\n      status\n      __typename\n    }\n    underAgeGate {\n      parentEmail\n      daysUntilCutoff\n      approvalGivenAt\n      __typename\n    }\n    authEmails\n    signupDataIfUnverified {\n      email\n      emailBounced\n      __typename\n    }\n    pendingEmailVerifications {\n      email\n      unverifiedAuthEmailToken\n      __typename\n    }\n    tosAccepted\n    shouldShowAgeCheck\n    __typename\n  }\n  actorIsImpersonatingUser\n}\n',
     }
 
     return this.graphQL("/getFullUserProfile", payload)
@@ -284,5 +287,21 @@ exports.KhanApi = class {
         "query getLearnMenuProgress($slugs: [String!]) {\n  user {\n    id\n    subjectProgressesBySlug(slugs: $slugs) {\n      topic {\n        id\n        slug\n        __typename\n      }\n      currentMastery {\n        percentage\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n",
     }
     return this.graphQL("/getLearnMenuProgress", payload)
+  }
+
+  createClassroomMutation = async ({ classroomName }) => {
+    const payload = {
+      operationName: "createClassroomMutation",
+      variables: { classroomName },
+      query:
+        "mutation createClassroomMutation($classroomName: String!, $subscribeToUpdates: Boolean) {\n  createClassroom(classroomName: $classroomName, subscribeToUpdates: $subscribeToUpdates) {\n    classroom {\n      id\n      cacheId\n      key\n      name\n      signupCode\n      __typename\n    }\n    error {\n      code\n      __typename\n    }\n    __typename\n  }\n}\n",
+    }
+    const url = `${BASE_URL}/api/internal/graphql/createClassroomMutation`
+    return this.post(url, payload, {
+      headers: {
+        Cookie: "fkey=fkey",
+        "x-ka-fkey": "fkey",
+      },
+    })
   }
 }
