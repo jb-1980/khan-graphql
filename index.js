@@ -91,13 +91,13 @@ exports.KhanApi = class {
     return this.graphQL("/getCoach", payload)
   }
 
-  ProgressByStudent = async (classId, pageSize = 1000) => {
+  ProgressByStudent = async (classId, pageSize = 1000, after = null) => {
     let payload = {
       operationName: "ProgressByStudent",
       variables: {
         classId,
         assignmentFilters: { dueAfter: null, dueBefore: null },
-        after: null,
+        after,
         pageSize,
       },
       query:
