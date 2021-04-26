@@ -1,6 +1,6 @@
 {
   "name": "khan-graphql",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Package to use Khan Academy graphql endpoints to fetch student data",
   "main": "index.js",
   "author": "Joseph Gilgen <gilgenlabs@gmail.com>",
