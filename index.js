@@ -63,8 +63,7 @@ exports.KhanApi = class {
     let payload = {
       operationName: "loginWithPasswordMutation",
       variables: { identifier, password },
-      query:
-        'mutation loginWithPasswordMutation($identifier: String!, $password: String!) {\n  loginWithPassword(identifier: $identifier, password: $password) {\n    user {\n      id\n      kaid\n      canAccessDistrictsHomepage\n      isTeacher\n      hasUnresolvedInvitations\n      transferAuthUrl(pathname: "")\n      preferredKaLocale {\n        id\n        kaLocale\n        __typename\n      }\n      __typename\n    }\n    isFirstLogin\n    error {\n      code\n      __typename\n    }\n    __typename\n  }\n}\n',
+      query: "mutation loginWithPasswordMutation($identifier: String!, $password: String!) {\n  loginWithPassword(identifier: $identifier, password: $password) {\n    user {\n      id\n      kaid\n      canAccessDistrictsHomepage\n      isTeacher\n      hasUnresolvedInvitations\n      transferAuthToken\n      preferredKaLocale {\n        id\n        kaLocale\n        status\n        __typename\n      }\n      __typename\n    }\n    isFirstLogin\n    error {\n      code\n      __typename\n    }\n    __typename\n  }\n}\n"
     }
 
     let url = `${BASE_URL}/api/internal/graphql/loginWithPasswordMutation`
@@ -73,6 +72,7 @@ exports.KhanApi = class {
       headers: {
         Cookie: "fkey=fkey",
         "x-ka-fkey": "fkey",
+        'Content-Type': 'application/json'
       },
     })
   }
