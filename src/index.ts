@@ -34,7 +34,7 @@ export class KhanApi {
       .then(async res => {
         let data = res.data.data.loginWithPassword
         if (data.error) {
-          if (data.error.code == "ALREADY_LOGGED_IN") {
+          if (data.error.code === "ALREADY_LOGGED_IN") {
             this.authenticated = true
             return this.user
           }
