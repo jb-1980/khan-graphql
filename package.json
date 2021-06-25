@@ -1,8 +1,16 @@
 {
-  "version": "1.6.0",
+  "version": "1.6.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "keywords": [
+    "graphql",
+    "Khan",
+    "Khan Academy",
+    "api"
+  ],
+  "homepage": "https://github.com/jb-1980/khan-graphql/blob/master/README.md",
+  "repository": "github:jb-1980/khan-graphql",
   "files": [
     "dist",
     "src"
@@ -22,17 +30,18 @@
   "peerDependencies": {},
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "pretty-quick --staged && tsdx lint"
     }
   },
   "prettier": {
     "printWidth": 80,
     "semi": false,
     "singleQuote": false,
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "tabWidth": 2
   },
   "name": "khan-graphql",
-  "author": "jb-1980",
+  "author": "Joseph Gilgen <gilgenlabs@gmail.com>",
   "module": "dist/khan-graphql.esm.js",
   "size-limit": [
     {
@@ -47,6 +56,8 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.10.1",
     "husky": "^5.1.3",
+    "prettier": "^2.3.1",
+    "pretty-quick": "^3.1.1",
     "size-limit": "^4.10.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
