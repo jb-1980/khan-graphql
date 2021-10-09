@@ -376,4 +376,10 @@ export class KhanApi {
     }
     return this.graphQL("/getUserInfoForSubjectProgress", payload)
   }
+
+  learnMenuTopicsQuery = async () => {
+    return this.get(
+      "https://www.khanacademy.org/api/internal/graphql/learnMenuTopicsQuery?hash=3650065515"
+    ).then(({ data }) => data)
+  }
 }
