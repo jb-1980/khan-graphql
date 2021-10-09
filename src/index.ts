@@ -382,4 +382,10 @@ export class KhanApi {
       "https://www.khanacademy.org/api/internal/graphql/learnMenuTopicsQuery?hash=3650065515"
     ).then(({ data }) => data)
   }
+
+  getCommoncore = async () => {
+    return this.get(
+      "https://www.khanacademy.org/api/internal/graphql/getCommoncore?hash=3758682353"
+    ).then(({ data }) => data)
+  }
 }
