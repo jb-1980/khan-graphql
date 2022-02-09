@@ -189,13 +189,13 @@ export class KhanApi {
   }
 
   getClassroomRoster = async ({
-    classId = "",
-    pageSize = 40,
+    classId,
     teacherKaid,
+    pageSize = 40
   }: {
-    classId?: string
+    classId: string
+    teacherKaid: string
     pageSize?: number
-    teacherKaid?: string
   }) => {
     const payload = {
       operationName: "getClassroomRoster",
