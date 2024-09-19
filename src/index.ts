@@ -79,7 +79,7 @@ export class KhanApi {
       operationName: "loginWithPasswordMutation",
       variables: { identifier, password },
       query:
-        "mutation loginWithPasswordMutation($identifier: String!, $password: String!) {\n  loginWithPassword(identifier: $identifier, password: $password) {\n    user {\n      id\n      kaid\n      canAccessDistrictsHomepage\n      isTeacher\n      hasUnresolvedInvitations\n      transferAuthToken\n      preferredKaLocale {\n        id\n        kaLocale\n        status\n        __typename\n      }\n      __typename\n    }\n    isFirstLogin\n    error {\n      code\n      __typename\n    }\n    __typename\n  }\n}\n",
+        "mutation loginWithPasswordMutation($identifier: String!, $password: String!) {\n  loginWithPassword(identifier: $identifier, password: $password) {\n    user {\n      id\n      kaid\n      canAccessDistrictsHomepage\n      isTeacher\n      hasUnresolvedInvitations\n      preferredKaLocale {\n        id\n        kaLocale\n        status\n        __typename\n      }\n      __typename\n    }\n    isFirstLogin\n    error {\n      code\n      __typename\n    }\n    __typename\n  }\n}",
     }
 
     let url = `${BASE_URL}/api/internal/graphql/loginWithPasswordMutation`
@@ -145,20 +145,23 @@ export class KhanApi {
   }
 
   ProgressByStudent = async (
-    classId: string,
+    classDescriptor: string,
     pageSize = 1000,
     after = null
   ) => {
     let payload = {
       operationName: "ProgressByStudent",
       variables: {
-        classId,
-        assignmentFilters: { dueAfter: null, dueBefore: null },
+        classDescriptor,
+        assignmentFilters: {
+          dueAfter: null,
+          dueBefore: null,
+        },
         after,
         pageSize,
       },
       query:
-        "query ProgressByStudent($assignmentFilters: CoachAssignmentFilters, $classId: String!, $pageSize: Int, $after: ID) {\n  coach {\n    id\n    studentList(id: $classId) {\n      id\n      cacheId\n      studentKaidsAndNicknames {\n        id\n        coachNickname\n        __typename\n      }\n      assignmentsPage(filters: $assignmentFilters, after: $after, pageSize: $pageSize) {\n        assignments {\n          id\n          dueDate\n          contents {\n            id\n            translatedTitle\n            kind\n            defaultUrlPath\n            __typename\n          }\n          itemCompletionStates: itemCompletionStatesForAllStudents {\n            completedOn\n            studentKaid\n            bestScore {\n              numAttempted\n              numCorrect\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        pageInfo {\n          nextCursor\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n",
+        "query ProgressByStudent($assignmentFilters: CoachAssignmentFilters, $classDescriptor: String!, $pageSize: Int, $after: ID) {\n  classroom: classroomByDescriptor(descriptor: $classDescriptor) {\n    id\n    cacheId\n    descriptor\n    name\n    studentKaidsAndNicknames {\n      id\n      coachNickname\n      __typename\n    }\n    assignmentsPage(filters: $assignmentFilters, after: $after, pageSize: $pageSize) {\n      assignments {\n        id\n        title\n        dueDate\n        contents {\n          id\n          translatedTitle\n          kind\n          defaultUrlPath\n          __typename\n        }\n        itemCompletionStates: itemCompletionStatesForAllStudents {\n          completedOn\n          studentKaid\n          bestScore {\n            numAttempted\n            numCorrect\n            __typename\n          }\n          activitySubmissions {\n            threadID\n            thread {\n              id\n              flagged\n              lastUpdatedAt\n              interactions {\n                id\n                answer\n                question\n                __typename\n              }\n              __typename\n            }\n            __typename\n          }\n          student {\n            id\n            kaid\n            profileRoot\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      pageInfo {\n        nextCursor\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}",
     }
 
     return this.graphQL("/ProgressByStudent", payload)
@@ -191,7 +194,7 @@ export class KhanApi {
   getClassroomRoster = async ({
     classId,
     teacherKaid,
-    pageSize = 40
+    pageSize = 40,
   }: {
     classId: string
     teacherKaid: string
